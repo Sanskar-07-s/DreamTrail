@@ -1,0 +1,18 @@
+{
+  "name": "dreamtrail-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DreamTrail — Turn dreams into experiences. AI-powered bucket list, life map, adventure journal & gamification platform.",
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "build": "npm run build --prefix client && npm run build --prefix functions",
+    "emulators": "firebase emulators:start",
+    "seed": "tsx scripts/seed.ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "tsx": "^4.7.0",
+    "vitest": "^1.4.0"
+  }
+}

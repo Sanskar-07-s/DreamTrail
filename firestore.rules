@@ -1,0 +1,103 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+    
+    function isNotUpdatingGamificationFields() {
+      let diff = request.resource.data.diff(resource.data).affectedKeys();
+      return !diff.hasAny(['totalXP', 'level', 'currentLevelXP', 'XPToNextLevel']);
+    }
+
+    function isPublicOrFriend(resourceData) {
+      return resourceData.visibility == 'PUBLIC' || 
+            (resourceData.visibility == 'FRIENDS' && isAuthenticated());
+    }
+
+    // System-wide public collections
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /achievements/{achievementId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    match /exploreExperiences/{experienceId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId) && !request.resource.data.keys().hasAny(['totalXP', 'level', 'currentLevelXP']);
+      allow update: if isOwner(userId) && isNotUpdatingGamificationFields();
+      allow delete: if false;
+
+      // Dreams subcollection
+      match /dreams/{dreamId} {
+        allow read: if isOwner(userId) || isPublicOrFriend(resource.data);
+        allow create, update, delete: if isOwner(userId);
+
+        match /milestones/{milestoneId} {
+          allow read, write: if isOwner(userId);
+        }
+      }
+
+      // Memories subcollection
+      match /memories/{memoryId} {
+        allow read: if isOwner(userId) || isPublicOrFriend(resource.data);
+        allow create, update, delete: if isOwner(userId);
+      }
+
+      // AI Plans subcollection
+      match /aiPlans/{planId} {
+        allow read, create, update, delete: if isOwner(userId);
+      }
+
+      // XP Transactions (Audit ledger - written only by Cloud Functions / Admin SDK)
+      match /xpTransactions/{transactionId} {
+        allow read: if isOwner(userId);
+        allow write: if false;
+      }
+
+      // Unlocked Achievements (Written only by Cloud Functions / Admin SDK)
+      match /achievements/{userAchievementId} {
+        allow read: if isAuthenticated();
+        allow write: if false;
+      }
+
+      // Saved experiences
+      match /savedExperiences/{expId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Friendships
+      match /friends/{friendId} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(userId);
+      }
+
+      // In-app Notifications
+      match /notifications/{notificationId} {
+        allow read, update, delete: if isOwner(userId);
+        allow create: if false;
+      }
+    }
+  }
+}

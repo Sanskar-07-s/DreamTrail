@@ -1,0 +1,114 @@
+# Firebase Data Connect GraphQL Schema for DreamTrail
+
+type User @table {
+  email: String!
+  totalXP: Int!
+  level: Int!
+  currentLevelXP: Int!
+  name: String
+  avatarUrl: String
+  bio: String
+  currentStreak: Int
+  longestStreak: Int
+  lastActivityDate: Timestamp
+  defaultCurrency: String
+  onboardingCompleted: Boolean
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+
+type Dream @table {
+  title: String!
+  status: String!
+  progress: Float!
+  userId: User!
+  description: String
+  categoryId: String
+  priority: Int
+  difficulty: String
+  targetDate: Timestamp
+  estimatedBudget: Float
+  actualBudget: Float
+  currency: String
+  locationName: String
+  city: String
+  state: String
+  country: String
+  latitude: Float
+  longitude: Float
+  geohash: String
+  isFavorite: Boolean
+  visibility: String
+  completedAt: Timestamp
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type Milestone @table {
+  title: String!
+  completed: Boolean!
+  order: Int!
+  dreamId: Dream!
+  description: String
+  completedAt: Timestamp
+  createdAt: Timestamp
+}
+
+type Memory @table {
+  dreamId: Dream!
+  imageUrl: String!
+  userId: User!
+  title: String
+  description: String
+  thumbnailUrl: String
+  videoUrl: String
+  storagePath: String
+  mimeType: String
+  fileSize: Int
+  locationName: String
+  latitude: Float
+  longitude: Float
+  geohash: String
+  memoryDate: Timestamp
+  rating: Int
+  visibility: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+  deletedAt: Timestamp
+}
+
+type AIPlan @table {
+  dreamId: Dream!
+  summary: String!
+  itinerary: String!
+  title: String
+  bestTime: String
+  duration: String
+  estimatedBudget: Float
+  currency: String
+  checklist: String
+  preparation: String
+  safety: String
+  recommendations: String
+  provider: String
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+
+type Achievement @table {
+  name: String!
+  requirementType: String!
+  bonusXP: Int!
+  description: String
+  icon: String
+  requirementValue: Int
+}
+
+type XPTransaction @table {
+  amount: Int!
+  reason: String!
+  userId: User!
+  createdAt: Timestamp!
+  referenceId: String
+}
