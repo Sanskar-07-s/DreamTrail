@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc, collection } from 'firebase/firestore';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY || 'demo-api-key',
-  authDomain: 'dreamtrail-prod.firebaseapp.com',
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID || 'dreamtrail-prod',
-  storageBucket: 'dreamtrail-prod.appspot.com',
-  messagingSenderId: '1234567890',
-  appId: '1:1234567890:web:demo'
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || 'dreamtrail-bbe96.firebaseapp.com',
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID || 'dreamtrail-bbe96',
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || 'dreamtrail-bbe96.firebasestorage.app',
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '493599864992',
+  appId: process.env.VITE_FIREBASE_APP_ID || '1:493599864992:web:b30f3e0f413b3ca561b1c5'
 };
 
 const app = initializeApp(firebaseConfig);

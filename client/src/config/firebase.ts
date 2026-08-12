@@ -5,8 +5,9 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
+// Firebase configuration loaded strictly from environment variables
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDQxbMCk0VorKUm-FpUb4QZJIkFPpJr9xk",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "dreamtrail-bbe96.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "dreamtrail-bbe96",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "dreamtrail-bbe96.firebasestorage.app",
